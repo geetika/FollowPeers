@@ -1,0 +1,94 @@
+﻿@model IEnumerable<FollowPeers.Models.PublicationModel>
+@{
+    ViewBag.Title = "My Publication";
+}
+@Html.Partial("_Header")
+@Html.Partial("_SideBar2")
+<div class="grid_10">
+    <div class="box">
+        <h2>
+            List Of My Publications</h2>
+        @Script("jquery.validate.min.js")
+        @Script("jquery.validate.unobtrusive.min.js")
+        @Script("jquery.bgiframe.js")
+        @Script("jquery.mcdropdown.js")
+        @Script("jquery-1.7.1.min.js")
+        <link rel="stylesheet" type="text/css" href="../../Content/css/jquery.mcdropdown.css" />
+        <link href="../../Content/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        @{
+            if (Model.Count() != 0)
+            {
+                <fieldset>
+                <legend>@Html.ActionLink("Add Publication", "Create")</legend>
+                <p>Number of Publications in the Database : @Model.Count()</p>
+                </fieldset>
+                foreach (var item in Model)
+                {
+            <div style="border-bottom: 1px solid grey; margin: 10px 0px;">
+                <div style="float: left;" id="Image">
+                    <img src="../../Content/images/paper_icon_large.jpg" style="margin-left: auto; margin-right: auto;
+                        width: 50px;" />
+                </div>
+                <div style="margin-left: 8px; float: left;">
+                    <a href="/PublicationModel/Details/@item.publicationID" id="title"><b>@item.title</b></a> 
+                    <div id="Author">Author(s) : @item.author</div>
+                    <div id="Year">Year of Publication : @item.year</div>
+                    @{if (@item.keyword != null)
+                      {<div id="Keyword">Keyword(s) : @item.keyword</div>}}
+                    @{if (@item.journal != null)
+                      {<div id="Journal">Journal : @item.journal</div>}}
+                    @{if (@item.conference != null)
+                      {<div id="Conference">Conference : @item.conference</div>}}
+                    @{if (@item.university != null)
+                      {<div id="University">University : @item.university</div>}}
+                </div>
+                <div style="float: right; margin-right: 5px; color: #888; font-size: 15px;">@Html.DisplayFor(modelItem => item.type)
+                    | @Html.DisplayFor(modelItem => item.status)  |
+                    <div style="float:right; font-size: 15px; margin-left: 5px;">
+                        @Html.ActionLink("More>>", "Details", new { id = item.publicationID })
+                    </div>
+                    </div>
+            </div>
+            <hr /> 
+                }
+            }
+            else
+            {<fieldset>
+                <legend>@Html.ActionLink("Add Publication", "Create")</legend>
+                <legend>You haven't added publications to your profile</legend>
+</fieldset>
+            }
+      }
+    </div>
+</div>
+<div class="grid_3">
+    <div class="box">
+        @{Html.RenderAction("ProgressTracker", "Profile");}
+    </div>
+</div>
+@Html.Partial("_Footer")
+@helper Script(string scriptName)
+    {
+    <script src="@Url.Content("~/Scripts/" + scriptName)" type="text/javascript"></script>
+}
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+
+    $('#Image').mouseover(function () {
+        $('#Keyword').slideDown("fast");
+        $('#Journal').slideDown("fast");
+        $('#Conference').slideDown("fast");
+        $('#University').slideDown("fast");
+    });
+    $('#Image').mouseout(function () {
+        $('#Keyword').hide();
+        $('#Journal').hide();
+        $('#Conference').hide();
+        $('#University').hide();
+    });
+</script>
